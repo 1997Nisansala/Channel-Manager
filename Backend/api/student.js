@@ -27,7 +27,7 @@ router.post('', (req, res) => {
     const insertCourseQuery = 'UPDATE students_details SET course_id1 = ?, course_id2 = ?, course_id3 = ? WHERE id = ?';
 
     // Slice the course_ids array to ensure only the first 3 IDs are used
-    const courseValues = course_ids.slice(0, 3).concat([studentId]);
+    const courseValues = course_ids.concat([studentId]);
 
     connection.query(insertCourseQuery, courseValues, (err) => {
       if (err) {
@@ -56,6 +56,7 @@ router.get('', (req, res) => {
   });
 });
 
+//search
 router.get('/:studentid*', (req, res) => {
   const { studentid } = req.params;
   const fullStudentId = studentid + (req.params[0] || ''); 
@@ -76,7 +77,7 @@ router.get('/:studentid*', (req, res) => {
   });
 });
 
-// Update student details API endpoint
+// Update student details
 router.put('/:studentid*', (req, res) => {
   const { studentid } = req.params;
   const fullStudentId = studentid + (req.params[0] || '');
@@ -103,12 +104,13 @@ router.put('/:studentid*', (req, res) => {
       if (results.affectedRows === 0) {
         res.status(404).json({ message: 'Student not found' });
       } else {
-        res.json({ message: 'Student details updated successfully' });
+        res.status(200).json({ message: 'Student details updated successfully' });
       }
     }
   );
 });
 
+//delete
 router.delete('/:studentid*', (req, res) => {
   const { studentid } = req.params;
   const fullStudentId = studentid + (req.params[0] || ''); 
